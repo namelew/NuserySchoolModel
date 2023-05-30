@@ -27,4 +27,5 @@ X = SelectKBest(chi2, k=8).fit_transform(X, Y)
 
 X_train, X_test, y_train, y_test = tts(X,Y, test_size=0.2, random_state=42)
 
+print(X,Y)
 # training model
