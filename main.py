@@ -1,5 +1,4 @@
 import pandas as pd
-import sys
 from sklearn.model_selection import KFold
 from sklearn.model_selection import GridSearchCV
 from sklearn import preprocessing as pp
@@ -7,14 +6,8 @@ from sklearn.ensemble import RandomForestClassifier as rfc
 from sklearn.metrics import recall_score as recall
 
 FILE="./nursery.csv"
-CASE="bared"
 KFOLD=7
 RCAVERAGE="micro"
-
-# load args
-
-if len(sys.argv) > 1:
-  CASE = sys.argv[1]
 
 # load the dataset
 
@@ -65,14 +58,9 @@ y_train = samples[best]["train"][1]
 X_test = samples[best]["test"][0] 
 y_test = samples[best]["test"][1]
 
-# training model and evaluate results
-if CASE == "bared":
-  forest = rfc()
-  forest.fit(X_train, y_train)
-  y_hat = forest.predict(X_test)
-  print(f"Model Metrics\n\tprecision: {forest.score(X_test, y_test)}\n\trecall: {recall(y_hat, y_test, average=RCAVERAGE)}")
-if CASE == "hpbest":
-  parameters = {
+# find the best hyperparameters
+
+parameters = {
       "n_estimators": [25, 50, 100, 200, 400],
       "criterion": ["gini", "entropy", "log_loss"],
       "max_depth": [5, 25, 50, 100, 200],
@@ -85,9 +73,11 @@ if CASE == "hpbest":
       "random_state": [42],
   }
 
-  forestGrid = GridSearchCV(rfc(), parameters)
-  forestGrid.fit(X_train, y_train)
-  forest = forestGrid.best_estimator_
-  forest.fit(X_train, y_train)
-  y_hat = forest.predict(X_test)
-  print(f"Optimized model with Select-K-Best and GridSearchCV\n\tprecision: {forest.score(X_test, y_test)}")
+forestGrid = GridSearchCV(rfc(), parameters)
+forestGrid.fit(X_train, y_train)
+
+# training model and evaluate results
+forest = forestGrid.best_estimator_
+forest.fit(X_train, y_train)
+y_hat = forest.predict(X_test)
+print(f"Model Metrics\n\tprecision: {forest.score(X_test, y_test)}\n\trecall: {recall(y_hat, y_test, average=RCAVERAGE)}")
