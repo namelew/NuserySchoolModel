@@ -4,9 +4,10 @@ from sklearn.model_selection import GridSearchCV
 from sklearn import preprocessing as pp
 from sklearn.ensemble import RandomForestClassifier as rfc
 from sklearn.metrics import recall_score as recall
+from imblearn.over_sampling import SMOTE
 
 FILE="./nursery.csv"
-KFOLD=7
+KFOLD=4
 RCAVERAGE="micro"
 
 # load the dataset
@@ -30,6 +31,8 @@ for collumn in df.columns:
 
 Y = df['reputation']
 X = df.drop(['reputation'], axis=1)
+
+X,Y = SMOTE(k_neighbors=1).fit_resample(X,Y)
 
 kf = KFold(n_splits=KFOLD, random_state=42, shuffle=True)
 forest = rfc()
@@ -66,7 +69,7 @@ parameters = {
       "max_depth": [3, 9, 81],
       "min_samples_split": [5, 25, 125],
       "min_samples_leaf": [5, 10, 20, 40],
-      "min_weight_fraction_leaf": [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.9, 1],
+      "min_weight_fraction_leaf": [0.0, 0.2, 0.4, 0.8],
       "max_features": ["sqrt", "log2"],
       "max_leaf_nodes": [50000, 60000, 70000, 80000, 90000],
       "min_impurity_decrease": [0.0, 0.02, 0.04, 0.08, 0.1],
