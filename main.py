@@ -61,17 +61,15 @@ y_test = samples[best]["test"][1]
 # find the best hyperparameters
 
 parameters = {
-      "n_estimators": [25, 50, 100, 200, 400, 800, 1600, 2400, 4800],
+      "n_estimators": [1000, 2000, 3000, 4000, 5000],
       "criterion": ["gini", "entropy", "log_loss"],
-      "max_depth": [1, 2, 4, 5, 25, 50, 100, 200],
-      "min_samples_split": [2, 4, 8, 16, 32, 64, 128],
-      "min_samples_leaf": [1, 2, 3, 4, 5, 6, 8, 9, 10],
+      "max_depth": [3, 9, 81],
+      "min_samples_split": [5, 25, 125],
+      "min_samples_leaf": [5, 10, 20, 40],
       "min_weight_fraction_leaf": [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.9, 1],
       "max_features": ["sqrt", "log2"],
-      "max_leaf_nodes": [10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000],
-      "min_impurity_decrease": [0.0, 0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1],
-      "warm_start": [True, False],
-      "oob_score": [True, False],
+      "max_leaf_nodes": [50000, 60000, 70000, 80000, 90000],
+      "min_impurity_decrease": [0.0, 0.02, 0.04, 0.08, 0.1],
       "n_jobs": [-1],
       "random_state": [42],
   }
