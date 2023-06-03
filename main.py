@@ -61,20 +61,26 @@ y_test = samples[best]["test"][1]
 # find the best hyperparameters
 
 parameters = {
-      "n_estimators": [25, 50, 100, 200, 400],
+      "n_estimators": [25, 50, 100, 200, 400, 800, 1600, 2400, 4800],
       "criterion": ["gini", "entropy", "log_loss"],
-      "max_depth": [5, 25, 50, 100, 200],
-      "min_samples_split": [2, 4, 8, 16, 32],
-      "min_samples_leaf": [1, 2, 3, 4, 5],
-      "min_weight_fraction_leaf": [0.0, 0.1, 0.2, 0.3, 0.4],
+      "max_depth": [1, 2, 4, 5, 25, 50, 100, 200],
+      "min_samples_split": [2, 4, 8, 16, 32, 64, 128],
+      "min_samples_leaf": [1, 2, 3, 4, 5, 6, 8, 9, 10],
+      "min_weight_fraction_leaf": [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.9, 1],
       "max_features": ["sqrt", "log2"],
-      "max_leaf_nodes": [10000, 20000, 30000, 40000, 50000],
-      "min_impurity_decrease": [0.0, 0.01, 0.02, 0.03, 0.04],
+      "max_leaf_nodes": [10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000],
+      "min_impurity_decrease": [0.0, 0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1],
+      "warm_start": [True, False],
+      "oob_score": [True, False],
+      "n_jobs": [-1],
       "random_state": [42],
   }
 
 forestGrid = GridSearchCV(rfc(), parameters)
 forestGrid.fit(X_train, y_train)
+
+df = pd.DataFrame(forestGrid.cv_results_)
+df.to_csv('grid_search_results_forest.csv', index=False)
 
 # training model and evaluate results
 forest = forestGrid.best_estimator_
