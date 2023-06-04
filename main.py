@@ -62,7 +62,7 @@ X_test = samples[best]["test"][0]
 y_test = samples[best]["test"][1]
 
 # training model and evaluate results
-forest = rfc(n_jobs=-1,random_state=42,)
+forest = rfc(n_jobs=-1,random_state=42)
 
 forest.fit(X_train, y_train)
 y_hat = forest.predict(X_test)
